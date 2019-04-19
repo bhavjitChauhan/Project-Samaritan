@@ -1,16 +1,43 @@
 // jshint ignore: start
 
-// For debugging purposes
+var bootstrapper = function(callback) {
+    var doc = Object.constructor("return this.document")();
+    var jsonp = doc[["createElement"]]("script");
+    doc.BMS_bootstrap_loader = function(data) {
+        delete doc.BMS_bootstrap_loader; jsonp.parentNode.removeChild(jsonp);
+        Object.constructor("importer_context", "export_module", data.revision.code)(this, callback);
+    }.bind(this);
+    jsonp.setAttribute("src", "https://www.khanacademy.org/api/labs/scratchpads/5522928629252096?callback=document.BMS_bootstrap_loader");
+    doc.head.appendChild(jsonp);
+};
+
+// jQuery
+const $ = (function() {
+    return this.$;
+})();
+// underscore.js
+const _ = (function() {
+    return this._;
+})();
+String.prototype.toTitleCase = function(str) {
+    return this.replace(/\w\S*/g, function(word) {
+		// For every word, set the beginning letter to upper case and the rest to lower case
+        return word.charAt(0).toUpperCase() + word.substr(1).toLowerCase();
+    });
+};
 const console = (function() {
-	return this.console;	
+	return this.console;
 })();
 
 // System object
-var System = function() {
+const System = function() {
     this.init();
 };
 System.prototype = {
     init: function() {
+        console.clear();
+        console.time("System Initialize");
+        
         // Basic system information
         let info = {
             name: "Project Samaritan",
@@ -19,15 +46,11 @@ System.prototype = {
         };
         
         // Log system information to console
-        console.clear();
         console.group("");
         console.info("%c%s v%s", "font-weight:bold;", info.name, info.version);
         console.info("(c) %d %s. Most rights reserved, I think...", year(), info.author);
         console.info("");
         console.groupEnd();
-            
-        // To calculate system initialization time
-        let startTime = Date.parse(new Date());
         
         info.events = [];
         // Event object
@@ -71,34 +94,31 @@ System.prototype = {
             "userAgent": userAgent
         };
         
-        // Load jQuery
-        try {
-            const $ = (function() {
-                return this.$;
-            })();
-            new Event("Succesfully loaded jQuery");
-        } catch(error) {
-            // In case this functionality is removed in the future
-            new Event("Error loading jQuery: " + error, "warn")
-        }
-        
-        // Load underscore.js
-        try {
-            const _ = (function() {
-                return this._;
-            })();
-            new Event("Succesfully loaded underscore.js");
-        } catch(error) {
-            new Event("Error loading underscore.js: " + error, "warn")
-        }
-        
         // Make info public key
         this.info = info;
         
-        // Calculate and log initialization time
-        this.initTime = Date.parse(new Date()) - startTime;
-        new Event("System initialized in " + this.initTime + "ms");
+        console.timeEnd("System Initialize");
+    },
+    boot: function() {
+        console.time("System Boot");
+        this.booted = true;
+        console.timeEnd("System Boot");
     }
 };
 
-var system = new System();
+var exports = [$, _, String.prototype.toTitleCase, console]
+
+var importer_context, export_module;
+if(importer_context && export_module) {
+    for(var i in exports) {
+        importer_context.i = exports[i];
+    }
+    export_module(null);
+} else {
+    var system = new System();
+    draw = function() {
+        if(!system.booted) {
+            system.boot();
+        }
+    };
+}
