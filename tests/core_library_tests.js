@@ -31,7 +31,7 @@ var runTests = function() {
 
 // Import library
 bootstrapper(function(BMS) {
-    BMS.import_module("4991467877138432", runTests);
+    BMS.import_module("4796495045427200", runTests);
 });
 
 // // For enabling the 'Restart' button
