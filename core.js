@@ -1,4 +1,9 @@
-//jshint ignore: start
+// jshint ignore: start
+
+// For debugging purposes
+const console = (function() {
+	return this.console;	
+})();
 
 // System object
 var System = function() {
@@ -7,30 +12,26 @@ var System = function() {
 System.prototype = {
     init: function() {
         // Basic system information
-        const NAME = "Project Samaritan", 
-        	  VERSION = "0.0.1", 
-        	  AUTHOR = "Aliquis";
-        	  
-        // For debugging purposes
-        const console = (function() {
-        	return this.console;	
-        })();
+        let info = {
+            name: "Project Samaritan",
+            version: "0.0.1",
+            author: "Aliquis"
+        };
         
         // Log system information to console
-        with(console) {
-            clear();
-            group("");
-            info("%c" + NAME + " v" + VERSION + "\n%c(c) " + year() + " " + AUTHOR + ". Most rights reserved, I think...\n ", "font-weight:bold;", "font-weight:normal");
-            groupEnd();
-        }
-        
+        console.clear();
+        console.group("");
+        console.info("%c%s v%s", "font-weight:bold;", info.name, info.version);
+        console.info("(c) %d %s. Most rights reserved, I think...", year(), info.author);
+        console.info("");
+        console.groupEnd();
+            
         // To calculate system initialization time
         let startTime = Date.parse(new Date());
         
-        // Stores all events
-        var logs = [];
+        info.events = [];
         // Event object
-        var Event = function(event, type) {
+        const Event = function(event, type) {
             this.event = event;
             this.type = type || "log";
             this.createAt = new Date();
@@ -47,17 +48,28 @@ System.prototype = {
                 }
             }
             // Add event to logs array
-            logs.push(this);
+            info.events.push(this);
         };
         
         // Client information
-        var window = (function () {
+        let window = (function () {
             return this;
         })();
-        this.appVersion = window.navigator.appVersion
-        new Event(this.appVersion, "debug")
-        this.userAgent = window.navigator.userAgent;
-        new Event(this.userAgent, "debug");
+        let appVersion = window.navigator.appVersion
+        new Event(appVersion, "debug")
+        let userAgent = window.navigator.userAgent;
+        new Event(userAgent, "debug");
+        // let browser = (function() {
+        //     var browsers = ["MSIE", "Firefox", "Safari", "Chrome", "Opera"];
+        //     for (i = browsers.length - 1; i > -1 && this.userAgent.indexOf(browsers[i]) === -1; i--) {}
+        //     return browsers[i];
+        // })();
+        
+        info.client = {
+            "window": window,
+            "appVersion": appVersion,
+            "userAgent": userAgent
+        };
         
         // Load jQuery
         try {
@@ -80,17 +92,13 @@ System.prototype = {
             new Event("Error loading underscore.js: " + error, "warn")
         }
         
+        // Make info public key
+        this.info = info;
+        
         // Calculate and log initialization time
         this.initTime = Date.parse(new Date()) - startTime;
         new Event("System initialized in " + this.initTime + "ms");
     }
 };
 
-// Export if called by another program as module
-var export_module;
-if (export_module){
-    export_module(System);
-} else {
-    // For testing purposes
-    var s = new System();
-}
+var system = new System();
