@@ -11,24 +11,6 @@ var bootstrapper = function(callback) {
     doc.head.appendChild(jsonp);
 };
 
-// jQuery
-const $ = (function() {
-    return this.$;
-})();
-// underscore.js
-const _ = (function() {
-    return this._;
-})();
-String.prototype.toTitleCase = function(str) {
-    return this.replace(/\w\S*/g, function(word) {
-		// For every word, set the beginning letter to upper case and the rest to lower case
-        return word.charAt(0).toUpperCase() + word.substr(1).toLowerCase();
-    });
-};
-const console = (function() {
-	return this.console;
-})();
-
 // System object
 const System = function() {
     this.init();
@@ -52,36 +34,14 @@ System.prototype = {
         console.info("");
         console.groupEnd();
         
-        info.events = [];
-        // Event object
-        const Event = function(event, type) {
-            this.event = event;
-            this.type = type || "log";
-            this.createAt = new Date();
-            try {
-                // Try using any specified log types
-                console[this.type](this.event);
-            } catch(error) {
-                if(error instanceof TypeError) {
-                    new Event("Invalid Event type '" + this.type + "'", "warn");
-                    // Log event to console regardless
-                    console.log(this.event);
-                } else {
-                    new Event("Error creating event: " + error, "error");
-                }
-            }
-            // Add event to logs array
-            info.events.push(this);
-        };
-        
         // Client information
         let window = (function () {
             return this;
         })();
         let appVersion = window.navigator.appVersion
-        new Event(appVersion, "debug")
+        console.debug(appVersion);
         let userAgent = window.navigator.userAgent;
-        new Event(userAgent, "debug");
+        console.debug(userAgent);
         // let browser = (function() {
         //     var browsers = ["MSIE", "Firefox", "Safari", "Chrome", "Opera"];
         //     for (i = browsers.length - 1; i > -1 && this.userAgent.indexOf(browsers[i]) === -1; i--) {}
@@ -106,19 +66,17 @@ System.prototype = {
     }
 };
 
-var exports = [$, _, String.prototype.toTitleCase, console]
-
-var importer_context, export_module;
-if(importer_context && export_module) {
-    for(var i in exports) {
-        importer_context.i = exports[i];
-    }
-    export_module(null);
-} else {
-    var system = new System();
-    draw = function() {
-        if(!system.booted) {
-            system.boot();
-        }
-    };
+var __requirements__ = {
+    "": "#5219990839590912"
 }
+
+bootstrapper({
+    done: function(BMS, methods) {
+        var system = new System();
+        draw = function() {
+            if(!system.booted) {
+                system.boot();
+            }
+        };
+    }
+})
