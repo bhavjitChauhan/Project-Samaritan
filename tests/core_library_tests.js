@@ -25,14 +25,14 @@ var runTests = function() {
         }
     } catch(error) {
         _clearLogs();
-        println("Error loading library, try reloading the page.\n\n" + error);
+        println("Error loading core library, try reloading the page.\n\n" + error);
     }
 };
 
 // Import library
 bootstrapper(function(BMS) {
-    BMS.import_module("4796495045427200", runTests);
+    BMS.import_module("5219990839590912", runTests);
 });
 
-// // For enabling the 'Restart' button
+// For enabling the 'Restart' button
 random();
