@@ -1,18 +1,20 @@
-/* jshint ignore: start */
-
-// jQuery
-const $ = (function() {
-    return this.$;
-})();
-
-// underscore.js
-const _ = (function() {
-    return this._;
-})();
+// jshint ignore: start
 
 const console = (function() {
-	return this.console;
+    return this.console;
 })();
+
+let setup = (function() {
+    scope = this;
+})();
+let objects = ["$", "_", "Backbone"];
+for(i in objects) {
+    try {
+        scope[i] = this[objects[i]];
+    } catch(error) {
+        console.error(error);
+    }
+}
 
 /**
  * Capitalizes the first letter of each word of string.
@@ -97,18 +99,55 @@ const formatDuration = function(ms) {
  * 
  * @link  https://github.com/30-seconds/30-seconds-of-code#hz
  * 
- * @param  {function}  fn           Function to be measured.
- * @param  {number}    [iterations] Number of times function should be invoked.
+ * @param  {function}   fn              Function to be measured.
+ * @param  {number}     [iterations]    Number of times function should be invoked.
  * 
  * @returns  {number}  Function performance in hertz - cycles per second.
  */
 var hertz = function(fn, iterations) {
-    iterations = iterations || 100;
+    iterations = iterations || 10000;
     var before = performance.now();
     for (var i = 0; i < iterations; i++) {
         fn();
     }
     return round(1000 * iterations / (performance.now() - before));
+};
+
+/**
+ * Calculates fastest function.
+ * 
+ * @link https://github.com/30-seconds/30-seconds-of-code#mostperformant
+ * 
+ * @param  {array}      fns             Funtions to be compared.
+ * @param  {number}     [iterations]    Number of times function should be invoked.
+ * 
+ * @returns  {number}  Index of function which performed fastest.
+ */
+var mostPerformant = function(fns, iterations) {
+    iterations = iterations || 10000;
+    var times = fns.map(function(fn) {
+        var before = performance.now();
+        for (var i = 0; i < iterations; i++) {
+            fn();
+        }
+        return performance.now() - before;
+    });
+    return times.indexOf(min.apply(null, times));
+};
+
+/**
+ * Prints HTML to canvas console.
+ * 
+ * @param  {string}  HTML  Text to be printed to canvas console. 
+ */
+const printHTML = function(HTML) {
+    println(HTML);
+    let latestLog = _.last(externals.canvas[['ownerDocument']]
+        .body
+        .childNodes[0]
+        .childNodes[1].childNodes)
+        .childNodes[0];
+    latestLog.innerHTML = HTML;
 };
 
 // const logEvent = function(event, type) {
@@ -132,7 +171,7 @@ var hertz = function(fn, iterations) {
 //     };
 // };
 
-var exports = [$, _, String.prototype.toTitleCase, console, attempt, formatDuration, hertz];
+var exports = [console, $, _, Backbone, String.prototype.toTitleCase, chainAsync, attempt, formatDuration, hertz, mostPerformant, printHTML];
 
 var importer_context, export_module;
 if(importer_context && export_module) {
