@@ -4,18 +4,6 @@ const console = (function() {
     return this.console;
 })();
 
-let setup = (function() {
-    scope = this;
-})();
-let objects = ["$", "_", "Backbone"];
-for(i in objects) {
-    try {
-        scope[i] = this[objects[i]];
-    } catch(error) {
-        console.error(error);
-    }
-}
-
 /**
  * Capitalizes the first letter of each word of string.
  * 
@@ -74,7 +62,6 @@ const chainAsync = function(fns) {
  * @returns  {string}  Readable format of duration. 
  */
 const formatDuration = function(ms) {
-    println(typeof ms)
     let time = {
         day: Math.floor(ms / 86400000),
         hour: Math.floor(ms / 3600000) % 24,
@@ -106,8 +93,8 @@ const formatDuration = function(ms) {
  */
 var hertz = function(fn, iterations) {
     iterations = iterations || 10000;
-    var before = performance.now();
-    for (var i = 0; i < iterations; i++) {
+    let before = performance.now();
+    for (let i = 0; i < iterations; i++) {
         fn();
     }
     return round(1000 * iterations / (performance.now() - before));
@@ -125,9 +112,9 @@ var hertz = function(fn, iterations) {
  */
 var mostPerformant = function(fns, iterations) {
     iterations = iterations || 10000;
-    var times = fns.map(function(fn) {
-        var before = performance.now();
-        for (var i = 0; i < iterations; i++) {
+    let times = fns.map(function(fn) {
+        let before = performance.now();
+        for (let i = 0; i < iterations; i++) {
             fn();
         }
         return performance.now() - before;
@@ -150,33 +137,53 @@ const printHTML = function(HTML) {
     latestLog.innerHTML = HTML;
 };
 
-// const logEvent = function(event, type) {
-//     type = type || "log";
-//     try {
-//         // Try using any specified log types
-//         console[type](event);
-//     } catch(error) {
-//         if(error instanceof TypeError) {
-//             new Event("Invalid Event type '" + type + "'", "warn");
-//             // Log event to console regardless
-//             console.log(event);
-//         } else {
-//             new Event("Error creating event: " + error, "error");
-//         }
-//     }
-//     return {
-//         event: event,
-//         type: type,
-//         createdAt: new Date()
-//     };
-// };
+const bootstrapper = function(callback) {
+    let doc = Object.constructor("return this.document")();
+    let jsonp = doc[["createElement"]]("script");
+    doc.BMS_bootstrap_loader = function(data) {
+        delete doc.BMS_bootstrap_loader; jsonp.parentNode.removeChild(jsonp);
+        Object.constructor("importer_context", "export_module", data.revision.code)(this, callback);
+    }.bind(this);
+    jsonp.setAttribute("src", "https://www.khanacademy.org/api/labs/scratchpads/5522928629252096?callback=document.BMS_bootstrap_loader");
+    doc.head.appendChild(jsonp);
+};
 
-var exports = [console, $, _, Backbone, String.prototype.toTitleCase, chainAsync, attempt, formatDuration, hertz, mostPerformant, printHTML];
+const __requirements__ = {
+    "centeredObjectText": "#5244695642996736",
+    "highlightedText": "#6710182776242176",
+    "multiColoredText": "#6037261762265088"
+};
 
-var importer_context, export_module;
-if(importer_context && export_module) {
-    for(var i in exports) {
-        importer_context.i = exports[i];
-    }
-    export_module(null);
-}
+bootstrapper({
+    done: function(BMS, modules) {
+        for(module in modules) {
+            window[module] = modules[module];
+        }
+        let exports = {
+            "console": console, 
+            "String.prototype.toTitleCase": String.prototype.toTitleCase,
+            "attempt": attempt,
+            "centeredObjectText": centeredObjectText,
+            "chainAsync": chainAsync,
+            "formatDuration": formatDuration,
+            "hertz": hertz,
+            "highlightedText": highlightedText,
+            "mostPerformant": mostPerformant,
+            "multiColoredText": multiColoredText,
+            "printHTML": printHTML
+        };
+        
+        if(importer_context && export_module) {
+            console.time("Core Library import");
+            for(let i in exports) {
+                print("Importing " + i + "...");
+                importer_context[i] = exports[i];
+                print(" done\n");
+            }
+            println("\nComplete.");
+            _clearLogs();
+            console.timeEnd("Core Library import");
+            export_module(exports);
+        }
+    } 
+});
