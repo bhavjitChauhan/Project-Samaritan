@@ -1,15 +1,15 @@
 // jshint ignore: start
 
-const console = (function() {
-    return this.console;
-})();
+const NAME = "Project Samaritan Core Library",
+      AUTHOR = "Aliquis",
+      VERSION = "0.0.3";
 
 /**
  * Capitalizes the first letter of each word of string.
  * 
  * @param  {string}  str  String to be converted.
  * 
- * @returns  {string}  String in title case convention. * 
+ * @returns  {string}  String in title case convention.
  */
 String.prototype.toTitleCase = function() {
     return this.replace(/\w\S*/g, function(word) {
@@ -50,6 +50,44 @@ const chainAsync = function(fns) {
         fn === last ? fn() : fn(next);
     };
     next();
+};
+
+/**
+ * Removes Khan Academy's loop protection from functions.
+ * 
+ * @link https://khanacademy.org/cs/i/5594326276014080
+ * 
+ * @param  {function}  fn  Function to be cleaned.
+ * 
+ * @returns  {function}  Cleaned function.
+ */
+const clean = function(fn) {
+    let string = fn.toString()
+        .replace(/__env__\.KAInfiniteLoopCount\+\+;/g, '')
+        .replace(/if \(__env__\.KAInfiniteLoopCount > 1000\) {[\s]+__env__\.KAInfiniteLoopProtect\(\'[^']*'\);[^}]+}/g, '')
+        .replace(/__env__\.PJSOutput\.applyInstance\((__env__\.\S+), '\S+'\)/g, 'new $1');
+    return Object.constructor('return (function(__env__) {return ' + string + ';});')()(this);
+};
+
+/**
+ * Copies data to clipboard.
+ * 
+ * @param  {string}  data  Data to be copied.
+ */
+const copyToClipboard = function(data) {
+    let doc = eval("document");
+	let textArea = doc["createElement"]("textarea");
+	textArea.value = data;
+	textArea.setAttribute("style", "height:0px");
+	doc.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+	try {
+		doc.execCommand("copy");
+	} catch (error) {
+		println("Error copying data to clipboard.\n\n"+ error);
+	}
+	doc.body.removeChild(textArea);
 };
 
 /**
@@ -97,7 +135,7 @@ var hertz = function(fn, iterations) {
     for (let i = 0; i < iterations; i++) {
         fn();
     }
-    return round(1000 * iterations / (performance.now() - before));
+    return Math.round(1000 * iterations / (performance.now() - before));
 };
 
 /**
@@ -108,7 +146,7 @@ var hertz = function(fn, iterations) {
  * @param  {array}      fns             Funtions to be compared.
  * @param  {number}     [iterations]    Number of times function should be invoked.
  * 
- * @returns  {number}  Index of function which performed fastest.
+ * @returns  {Object}  Index of function which performed fastest and times recorded.
  */
 var mostPerformant = function(fns, iterations) {
     iterations = iterations || 10000;
@@ -119,22 +157,25 @@ var mostPerformant = function(fns, iterations) {
         }
         return performance.now() - before;
     });
-    return times.indexOf(min.apply(null, times));
+    return {
+        winner: times.indexOf(Math.round.apply(null, times)),
+        times: times
+    };
 };
 
 /**
  * Prints HTML to canvas console.
  * 
- * @param  {string}  HTML  Text to be printed to canvas console. 
+ * @param  {string}  data  Text to be printed to canvas console. 
  */
-const printHTML = function(HTML) {
-    println(HTML);
-    let latestLog = _.last(externals.canvas[['ownerDocument']]
+const printHTML = function(data) {
+    println(data);
+    let latestLog = _.last(eval('document')
         .body
         .childNodes[0]
         .childNodes[1].childNodes)
         .childNodes[0];
-    latestLog.innerHTML = HTML;
+    latestLog.innerHTML = data;
 };
 
 const bootstrapper = function(callback) {
@@ -150,9 +191,13 @@ const bootstrapper = function(callback) {
 
 const __requirements__ = {
     "centeredObjectText": "#5244695642996736",
-    "highlightedText": "#6710182776242176",
-    "multiColoredText": "#6037261762265088"
+    "highlightText": "#6710182776242176",
+    "multiColoredText": "#6037261762265088",
+    "outlineText": "#4933300921925632"
 };
+
+var importer_context;
+let standalone = !importer_context;
 
 bootstrapper({
     done: function(BMS, modules) {
@@ -160,20 +205,27 @@ bootstrapper({
             window[module] = modules[module];
         }
         let exports = {
-            "console": console, 
             "String.prototype.toTitleCase": String.prototype.toTitleCase,
             "attempt": attempt,
             "centeredObjectText": centeredObjectText,
             "chainAsync": chainAsync,
+            "clean": clean,
+            "copyToClipboard": copyToClipboard,
             "formatDuration": formatDuration,
             "hertz": hertz,
-            "highlightedText": highlightedText,
+            "highlightText": highlightText,
             "mostPerformant": mostPerformant,
             "multiColoredText": multiColoredText,
+            "outlineText": outlineText,
             "printHTML": printHTML
         };
-        
-        if(importer_context && export_module) {
+        if(standalone) {
+            background(255);
+            fill(0);
+            textAlign(CENTER);
+            textFont(createFont("monospace"), 25);
+            text(NAME + "\nVersion " + VERSION, width / 2, height / 2);
+        } else {
             console.time("Core Library import");
             for(let i in exports) {
                 print("Importing " + i + "...");
@@ -182,8 +234,20 @@ bootstrapper({
             }
             println("\nComplete.");
             _clearLogs();
+            exports.NAME = "Project Samaritan Core Library";
+            exports.AUTHOR = AUTHOR;
+            exports.VERSION = VERSION;
             console.timeEnd("Core Library import");
             export_module(exports);
         }
-    } 
+    },
+    progress: function(progress) {
+        background(255);
+        if(standalone) {
+            fill(0);
+            textAlign(CENTER);
+            textFont(createFont("monospace"), 25);
+            text((progress.completed / progress.total) * 100 + "%", width / 2, height / 2)
+        }
+    }
 });
