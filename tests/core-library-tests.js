@@ -11,20 +11,24 @@ const bootstrapper = function(callback) {
     doc.head.appendChild(jsonp);
 };
 
-var run = function() {
+var run = function(core) {
     try {
         console.clear();
         textFont(createFont("monospace"));
-        fill(0);
-        // Demonstrate executing functions asynchronously with `chainAsync`
+        // Demonstrating `chainAsync` by executing tests asynchronously
         chainAsync([function(next) {
-            // Demonstrate `toTitleCase` method
+            fill(0);
+            // Demonstrating `toTitleCase` method
             text("core library tests".toTitleCase(), 25, 50);
+            fill(255);
+            // Demonstrating `outlineText` function
+            outlineText("v" + core.VERSION, 35 + textWidth("Core Library Tests"), 50);
             next(); 
         }, function(next) {
-            // Demonstrate `highlightedText`
-            // Demonstrate formatted duration from milliseconds with `formatDuration`
-            highlightedText(formatDuration(millis()), 25, 75, color(255, 255, 0));
+            fill(0);
+            // Demonstrating `highlightText`
+            // Demonstrating formatted duration from milliseconds with `formatDuration`
+            highlightText(formatDuration(millis()), 25, 100, color(255, 255, 0));
             next();
         }, function(next) {
             // Libraries to display
@@ -33,19 +37,36 @@ var run = function() {
                 "underscore.js version": _.VERSION,
                 "Backbone.js version": Backbone.VERSION
             };
-            // Demonstrate `centeredObjectText` by displaying library name and version
-            text(centeredObjectText(libraries), 25, 100);
+            // Demonstrating `centeredObjectText` by displaying library name and version
+            text(centeredObjectText(libraries), 25, 150);
             next();
         }, function(next) {
-            // Demonstrate `mostPerformant` by testing which method of printint to browser console is more efficient
-            let winner = mostPerformant([debug, console.log]);
-            // Demonstrate text with colors based on results from performance test with `multiColoredText`
-            multiColoredText("[0,0,255]debug() [0,0,0]is " + (winner === 0 ? "[0,255,0]faster" : "[255,0,0]slower") + " [0,0,0]than [0,0,255]console.log()", 25, 175);
+            // Demonstrating `mostPerformant` by testing which method of printint to browser console is more efficient
+            let test = mostPerformant([debug, console.log]);
+            let winner = test.winner;
+            let times = test.times;
+            // Demonstrating text with colors based on results from performance test with `multiColoredText`
+            fill(150);
+            multiColoredText("[0,0,255]debug() [0,0,0]performed " + (winner === 0 ? "[0,255,0]faster" : "[255,0,0]slower") + " [0,0,0]than [0,0,255]console.log()", 25, 250);
+            let w = textWidth("debug() performed slo");
+            pushStyle();
+            textAlign(CENTER, TOP);
+            textSize(10);
+            text("TIMES: " + times.map(function(time) {
+                return time.toFixed(2);
+            }), 25 + w, 250 + (textAscent() * 3));
+            popStyle();
             next();
         }, function() {
-            // Demonstrate `attempt` by executing `printHTML` which
-            attempt(printHTML, "<a href='https://www.khanacademy.org/profile/AIiquis/'>My Profile");
-        }])
+            // Demonstrating `attempt` by executing `printHTML`
+            // Demonstrating `printHTML` by printing link to my KA profile
+            attempt(printHTML, "<a target='_blank' href='https://www.khanacademy.org/profile/AIiquis/'>My Profile</a> [Ctrl + Click]");
+        }]);
+        mouseReleased = function() {
+            // Demonstrating `copyToClipboard` by copying my KA profile link on mouse release
+            copyToClipboard("https://www.khanacademy.org/profile/AIiquis/");
+            println("Copied to clipboard");
+        };
     } catch(error) {
         println("\n\nError loading library, try restarting.\n\n" + error);
     }
@@ -58,7 +79,17 @@ const __requirements__ = {
 // Import library
 bootstrapper({
     done: function(BMS, modules) {
-        run();
+        background(255);
+        textAlign(LEFT, TOP);
+        textSize(12);
+        scale(1.25);
+        run(modules.core);
+    },
+    progress: function() {
+        fill(0);
+        textAlign(CENTER);
+        textFont(createFont("monospace"));
+        text("Importing library...", width / 2, height / 2);   
     }
 })
 
