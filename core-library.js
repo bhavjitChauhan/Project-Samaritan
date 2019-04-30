@@ -1,15 +1,19 @@
 // jshint ignore: start
 
 const NAME = "Project Samaritan Core Library",
-      AUTHOR = "Aliquis",
-      VERSION = "0.0.3";
+      VERSION = "0.0.3",
+      AUTHOR = "Aliquis";
+
+console.time("Import Core Library");
+
+// Functions {
 
 /**
  * Capitalizes the first letter of each word of string.
  * 
- * @param  {string}  str  String to be converted.
+ * @param {string}  str  String to be converted.
  * 
- * @returns  {string}  String in title case convention.
+ * @returns {string}  String in title case convention.
  */
 String.prototype.toTitleCase = function() {
     return this.replace(/\w\S*/g, function(word) {
@@ -21,9 +25,9 @@ String.prototype.toTitleCase = function() {
 /**
  * Tries to invoke function with arguments.
  * 
- * @link  https://github.com/30-seconds/30-seconds-of-code#attempt
+ * @link https://github.com/30-seconds/30-seconds-of-code#attempt
  * 
- * @param  {function}  fn  Function to be invoked.
+ * @param {function}  fn  Function to be invoked.
  */
 const attempt = function(fn) {
     try {
@@ -37,9 +41,9 @@ const attempt = function(fn) {
 /**
  * Runs multiple functions asynchronously.
  * 
- * @link  https://github.com/30-seconds/30-seconds-of-code#chainasync
+ * @link https://github.com/30-seconds/30-seconds-of-code#chainasync
  * 
- * @param  {array}  fns  Contains functions.
+ * @param {array}  fns  Contains functions.
  */
 const chainAsync = function(fns) {
     let current = 0;
@@ -57,9 +61,9 @@ const chainAsync = function(fns) {
  * 
  * @link https://khanacademy.org/cs/i/5594326276014080
  * 
- * @param  {function}  fn  Function to be cleaned.
+ * @param {function}  fn  Function to be cleaned.
  * 
- * @returns  {function}  Cleaned function.
+ * @returns {function}  Cleaned function.
  */
 const clean = function(fn) {
     let string = fn.toString()
@@ -72,7 +76,7 @@ const clean = function(fn) {
 /**
  * Copies data to clipboard.
  * 
- * @param  {string}  data  Data to be copied.
+ * @param {string}  data  Data to be copied.
  */
 const copyToClipboard = function(data) {
     let doc = eval("document");
@@ -93,11 +97,11 @@ const copyToClipboard = function(data) {
 /**
  * Converts milliseconds to readable format.
  * 
- * @link  https://github.com/30-seconds/30-seconds-of-code#attempt
+ * @link https://github.com/30-seconds/30-seconds-of-code#attempt
  * 
- * @param  {number}  ms  Duration in milliseconds.
+ * @param {number}  ms  Duration in milliseconds.
  * 
- * @returns  {string}  Readable format of duration. 
+ * @returns {string}  Readable format of duration. 
  */
 const formatDuration = function(ms) {
     let time = {
@@ -122,14 +126,14 @@ const formatDuration = function(ms) {
 /**
  * Calculates number of times function can run per second.
  * 
- * @link  https://github.com/30-seconds/30-seconds-of-code#hz
+ * @link https://github.com/30-seconds/30-seconds-of-code#hz
  * 
- * @param  {function}   fn              Function to be measured.
- * @param  {number}     [iterations]    Number of times function should be invoked.
+ * @param {function}   fn              Function to be measured.
+ * @param {number}     [iterations]    Number of times function should be invoked.
  * 
- * @returns  {number}  Function performance in hertz - cycles per second.
+ * @returns {number}  Function performance in hertz - cycles per second.
  */
-var hertz = function(fn, iterations) {
+const hertz = function(fn, iterations) {
     iterations = iterations || 10000;
     let before = performance.now();
     for (let i = 0; i < iterations; i++) {
@@ -143,12 +147,12 @@ var hertz = function(fn, iterations) {
  * 
  * @link https://github.com/30-seconds/30-seconds-of-code#mostperformant
  * 
- * @param  {array}      fns             Funtions to be compared.
- * @param  {number}     [iterations]    Number of times function should be invoked.
+ * @param {array}      fns             Funtions to be compared.
+ * @param {number}     [iterations]    Number of times function should be invoked.
  * 
- * @returns  {Object}  Index of function which performed fastest and times recorded.
+ * @returns {Object}  Index of function which performed fastest and times recorded.
  */
-var mostPerformant = function(fns, iterations) {
+const mostPerformant = function(fns, iterations) {
     iterations = iterations || 10000;
     let times = fns.map(function(fn) {
         let before = performance.now();
@@ -166,7 +170,7 @@ var mostPerformant = function(fns, iterations) {
 /**
  * Prints HTML to canvas console.
  * 
- * @param  {string}  data  Text to be printed to canvas console. 
+ * @param {string}  data  Text to be printed to canvas console. 
  */
 const printHTML = function(data) {
     println(data);
@@ -177,7 +181,10 @@ const printHTML = function(data) {
         .childNodes[0];
     latestLog.innerHTML = data;
 };
+// }
+// Exporting {
 
+// Using BMS, see www.khanacademy.org/cs/i/6070976254115840
 const bootstrapper = function(callback) {
     let doc = Object.constructor("return this.document")();
     let jsonp = doc[["createElement"]]("script");
@@ -189,6 +196,7 @@ const bootstrapper = function(callback) {
     doc.head.appendChild(jsonp);
 };
 
+// Functions to be imported from other programs
 const __requirements__ = {
     "centeredObjectText": "#5244695642996736",
     "highlightText": "#6710182776242176",
@@ -196,15 +204,19 @@ const __requirements__ = {
     "outlineText": "#4933300921925632"
 };
 
-var importer_context;
+// Check if program is being imported or running by itself
+let importer_context;
 let standalone = !importer_context;
 
 bootstrapper({
     done: function(BMS, modules) {
+        // Dynamically define imported functions
         for(module in modules) {
             window[module] = modules[module];
         }
         let exports = {
+            // For testing if variables were defined properly in importer's context
+            "IMPORTED_CORE": true,
             "String.prototype.toTitleCase": String.prototype.toTitleCase,
             "attempt": attempt,
             "centeredObjectText": centeredObjectText,
@@ -223,31 +235,34 @@ bootstrapper({
             background(255);
             fill(0);
             textAlign(CENTER);
-            textFont(createFont("monospace"), 25);
+            textFont(createFont("monospace"), 15);
             text(NAME + "\nVersion " + VERSION, width / 2, height / 2);
         } else {
-            console.time("Core Library import");
+            console.log("Defining library functions...");
             for(let i in exports) {
-                print("Importing " + i + "...");
+                // Dynamically define functions in importer's context
                 importer_context[i] = exports[i];
-                print(" done\n");
             }
-            println("\nComplete.");
-            _clearLogs();
-            exports.NAME = "Project Samaritan Core Library";
+            // Add library information in exports module
+            exports.NAME = NAME;
             exports.AUTHOR = AUTHOR;
             exports.VERSION = VERSION;
-            console.timeEnd("Core Library import");
+            console.log("Importing library object...")
             export_module(exports);
+            console.timeEnd("Import Core Library");
         }
     },
     progress: function(progress) {
         background(255);
         if(standalone) {
             fill(0);
-            textAlign(CENTER);
-            textFont(createFont("monospace"), 25);
-            text((progress.completed / progress.total) * 100 + "%", width / 2, height / 2)
+            textAlign(CENTER); 
+            textFont(createFont("monospace"), 15);
+            text((progress.completed / progress.total) * 100 + "%", width / 2, height / 2);
+        } else {
+            console.log("Fetching module " + Object.keys(__requirements__)[progress.completed] + "...");
         }
     }
 });
+
+// }
