@@ -1,19 +1,17 @@
 // jshint ignore: start
 
-const bootstrapper = function(callback) {
-    let doc = Object.constructor("return this.document")();
-    let jsonp = doc[["createElement"]]("script");
-    doc.BMS_bootstrap_loader = function(data) {
-        delete doc.BMS_bootstrap_loader; jsonp.parentNode.removeChild(jsonp);
-        Object.constructor("importer_context", "export_module", data.revision.code)(this, callback);
-    }.bind(this);
-    jsonp.setAttribute("src", "https://www.khanacademy.org/api/labs/scratchpads/5522928629252096?callback=document.BMS_bootstrap_loader");
-    doc.head.appendChild(jsonp);
-};
+// For enabling the 'Restart' button
+random();
+/* The current environnment the program is in. To be utilized by modules and core to determine wether verbose debugging and experimental features should be enabled. 
 
+Environment should be set to 'production', 'development' or 'canary' */
+const ENV = "canary";
+// Clear any console logs created by Khan Academy or extensions
+console.clear();
+
+// Tests {
 var run = function(core) {
     try {
-        console.clear();
         textFont(createFont("monospace"));
         // Demonstrating `chainAsync` by executing tests asynchronously
         chainAsync([function(next) {
@@ -71,6 +69,18 @@ var run = function(core) {
         println("\n\nError loading library, try restarting.\n\n" + error);
     }
 };
+// }
+// Importing {
+const bootstrapper = function(callback) {
+    let doc = Object.constructor("return this.document")();
+    let jsonp = doc[["createElement"]]("script");
+    doc.BMS_bootstrap_loader = function(data) {
+        delete doc.BMS_bootstrap_loader; jsonp.parentNode.removeChild(jsonp);
+        Object.constructor("importer_context", "export_module", data.revision.code)(this, callback);
+    }.bind(this);
+    jsonp.setAttribute("src", "https://www.khanacademy.org/api/labs/scratchpads/5522928629252096?callback=document.BMS_bootstrap_loader");
+    doc.head.appendChild(jsonp);
+};
 
 const __requirements__ = {
     "core": "#5219990839590912"
@@ -92,6 +102,4 @@ bootstrapper({
         text("Importing library...", width / 2, height / 2);   
     }
 })
-
-// For enabling the 'Restart' button
-random();
+// }
