@@ -5,22 +5,22 @@ random();
 /* The current environnment the program is in. To be utilized by modules and core to determine wether verbose debugging and experimental features should be enabled. 
 
 Environment should be set to 'production', 'development' or 'canary' */
-const ENV = "canary";
+const ENV = 'canary';
 // Clear any console logs created by Khan Academy or extensions
 console.clear();
 
 // Tests {
 var run = function(core) {
     try {
-        textFont(createFont("monospace"));
+        textFont(createFont('monospace'));
         // Demonstrating `chainAsync` by executing tests asynchronously
         chainAsync([function(next) {
             fill(0);
             // Demonstrating `toTitleCase` method
-            text("core library tests".toTitleCase(), 25, 50);
+            text('core library tests'.toTitleCase(), 25, 50);
             fill(255);
             // Demonstrating `outlineText` function
-            outlineText("v" + core.VERSION, 35 + textWidth("Core Library Tests"), 50);
+            outlineText('v' + core.VERSION, 35 + textWidth('Core Library Tests'), 50);
             next(); 
         }, function(next) {
             fill(0);
@@ -31,9 +31,9 @@ var run = function(core) {
         }, function(next) {
             // Libraries to display
             let libraries = {
-                "jQuery version": $().jquery,
-                "underscore.js version": _.VERSION,
-                "Backbone.js version": Backbone.VERSION
+                'jQuery version': $().jquery,
+                'underscore.js version': _.VERSION,
+                'Backbone.js version': Backbone.VERSION
             };
             // Demonstrating `centeredObjectText` by displaying library name and version
             text(centeredObjectText(libraries), 25, 150);
@@ -45,12 +45,12 @@ var run = function(core) {
             let times = test.times;
             // Demonstrating text with colors based on results from performance test with `multiColoredText`
             fill(150);
-            multiColoredText("[0,0,255]debug() [0,0,0]performed " + (winner === 0 ? "[0,255,0]faster" : "[255,0,0]slower") + " [0,0,0]than [0,0,255]console.log()", 25, 250);
-            let w = textWidth("debug() performed slo");
+            multiColoredText('[0,0,255]debug() [0,0,0]performed ' + (winner === 0 ? '[0,255,0]faster' : '[255,0,0]slower') + ' [0,0,0]than [0,0,255]console.log()', 25, 250);
+            let w = textWidth('debug() performed slo');
             pushStyle();
             textAlign(CENTER, TOP);
             textSize(10);
-            text("TIMES: " + times.map(function(time) {
+            text('TIMES: ' + times.map(function(time) {
                 return time.toFixed(2);
             }), 25 + w, 250 + (textAscent() * 3));
             popStyle();
@@ -58,32 +58,32 @@ var run = function(core) {
         }, function() {
             // Demonstrating `attempt` by executing `printHTML`
             // Demonstrating `printHTML` by printing link to my KA profile
-            attempt(printHTML, "<a target='_blank' href='https://www.khanacademy.org/profile/AIiquis/'>My Profile</a> [Ctrl + Click]");
+            attempt(printHTML, '<a target="_blank" href="ttps://www.khanacademy.org/profile/AIiquis/">My Profile</a> [Ctrl + Click]');
         }]);
         mouseReleased = function() {
             // Demonstrating `copyToClipboard` by copying my KA profile link on mouse release
-            copyToClipboard("https://www.khanacademy.org/profile/AIiquis/");
-            println("Copied to clipboard");
+            copyToClipboard('https://www.khanacademy.org/profile/AIiquis/');
+            println('Copied to clipboard');
         };
     } catch(error) {
-        println("\n\nError loading library, try restarting.\n\n" + error);
+        println('\n\nError loading library, try restarting.\n\n' + error);
     }
 };
 // }
 // Importing {
 const bootstrapper = function(callback) {
-    let doc = Object.constructor("return this.document")();
-    let jsonp = doc[["createElement"]]("script");
+    let doc = Object.constructor('return this.document')();
+    let jsonp = doc[['createElement']]('script');
     doc.BMS_bootstrap_loader = function(data) {
         delete doc.BMS_bootstrap_loader; jsonp.parentNode.removeChild(jsonp);
-        Object.constructor("importer_context", "export_module", data.revision.code)(this, callback);
+        Object.constructor('importer_context', 'export_module', data.revision.code)(this, callback);
     }.bind(this);
-    jsonp.setAttribute("src", "https://www.khanacademy.org/api/labs/scratchpads/5522928629252096?callback=document.BMS_bootstrap_loader");
+    jsonp.setAttribute('src', 'https://www.khanacademy.org/api/labs/scratchpads/5870919682981888?callback=document.BMS_bootstrap_loader');
     doc.head.appendChild(jsonp);
 };
 
 const __requirements__ = {
-    "core": "#5219990839590912"
+    'core': 'library'
 }
 
 // Import library
@@ -98,8 +98,8 @@ bootstrapper({
     progress: function() {
         fill(0);
         textAlign(CENTER);
-        textFont(createFont("monospace"));
-        text("Importing library...", width / 2, height / 2);   
+        textFont(createFont('monospace'));
+        text('Importing library...', width / 2, height / 2);   
     }
 })
 // }
