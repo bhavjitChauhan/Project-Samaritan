@@ -1,14 +1,14 @@
 // jshint ignore: start
-const NAME = "Project Samaritan Images Library",
-	VERSION = "0.0.2",
-	AUTHOR = "Aliquis";
+const NAME = 'Project Samaritan Images Library',
+	VERSION = '0.0.2',
+	AUTHOR = 'Aliquis';
 
-console.time("Import Images");
+console.time('Import Images');
 // Image Object {
 const Image = function(name, code) {
-	this.name = name || "Unknown";
-	if (typeof code !== "function") {
-		console.error("Image '" + this.name + "' has invalid draw code.");
+	this.name = name || 'Unknown';
+	if (typeof code !== 'function') {
+		console.error('Image \'' + this.name + '\' has invalid draw code.');
 		return;
 	}
 	this.load = function() {
@@ -23,8 +23,8 @@ const Image = function(name, code) {
 	};
 	this.draw = function(x, y) {
 		if (!this.loaded) {
-			console.warn("Attempted to draw image '" + this.name +
-				"' before initialization.");
+			console.warn('Attempted to draw image \'' + this.name +
+				'\' before initialization.');
 			this.load();
 		}
 		image(this.image, x, y);
@@ -32,7 +32,7 @@ const Image = function(name, code) {
 };
 // }
 // Images {
-const testImage = new Image("Test", function() {
+const testImage = new Image('Test', function() {
 	translate(25, 30);
     noStroke();
     fill(RED);
@@ -47,14 +47,14 @@ var images = [testImage];
 // Exporting {
 let export_module;
 if (export_module) {
-	console.log("Importing images object...")
+	console.log('Importing images object...')
 	export_module(images);
-	console.timeEnd("Import Images");
+	console.timeEnd('Import Images');
 } else {
     background(255);
     fill(0);
     textAlign(CENTER);
-    textFont(createFont("monospace"), 15);
-    text(NAME + "\nVersion " + VERSION, width / 2, height / 2);
+    textFont(createFont('monospace'), 15);
+    text(NAME + '\nVersion ' + VERSION, width / 2, height / 2);
 }
 // }

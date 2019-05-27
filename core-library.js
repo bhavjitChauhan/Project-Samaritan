@@ -1,24 +1,24 @@
 // jshint ignore: start
-const NAME = "Project Samaritan Core Library",
-	VERSION = "0.0.4",
-	AUTHOR = "Aliquis";
+const NAME = 'Project Samaritan Core Library',
+	VERSION = '0.0.4',
+	AUTHOR = 'Aliquis';
 
-console.time("Import Core Library");
+console.time('Import Core Library');
 // Variables {
 // Colors
 const colors = {
-	"TRANSPARENT": color(0, 0),
-	"BLACK": color(0),
-	"WHITE": color(255),
-	"RED": color(255, 0, 0),
-	"GREEN": color(0, 255, 0),
-	"BLUE": color(0, 0, 255)
+	'TRANSPARENT': color(0, 0),
+	'BLACK': color(0),
+	'WHITE': color(255),
+	'RED': color(255, 0, 0),
+	'GREEN': color(0, 255, 0),
+	'BLUE': color(0, 0, 255)
 };
 // Fonts
 const fonts = {
-    "PRIMARY_FONT": createFont("sans-serif"),
-    "SECONDARY_FONT": createFont("sans-serif"),
-    "MONO_FONT": createFont("Consolas")
+    'PRIMARY_FONT': createFont('sans-serif'),
+    'SECONDARY_FONT': createFont('sans-serif'),
+    'MONO_FONT': createFont('Consolas')
 };
 // }
 // Functions {
@@ -44,7 +44,7 @@ String.prototype.toTitleCase = function() {
  */
 var assert = function(condition, message) {
     if (!condition) {
-        throw message || "Assertion failed";
+        throw message || 'Assertion failed';
     }
 }
 /**
@@ -103,21 +103,21 @@ const clean = function(fn) {
  */
 const copyToClipboard = function(data) {
     try {
-        if (ENV != "development") throw "error";
+        if (ENV != 'development') throw 'error';
     } catch (error) {
-        println("The copy to clipboard function is in development and may result in unintended behaviour.");
+        println('The copy to clipboard function is in development and may result in unintended behaviour.');
     }
-	let doc = eval("document");
-	let textArea = doc["createElement"]("textarea");
+	let doc = eval('document');
+	let textArea = doc['createElement']('textarea');
 	textArea.value = data;
-	textArea.setAttribute("style", "height:0px");
+	textArea.setAttribute('style', 'height:0px');
 	doc.body.appendChild(textArea);
 	textArea.focus();
 	textArea.select();
 	try {
-		doc.execCommand("copy");
+		doc.execCommand('copy');
 	} catch (error) {
-		println("Error copying data to clipboard.\n\n" + error);
+		println('Error copying data to clipboard.\n\n' + error);
 	}
 	doc.body.removeChild(textArea);
 };
@@ -143,7 +143,7 @@ const formatDuration = function(ms) {
 	}).map(function(entry) {
 		let key = entry[0],
 			value = entry[1];
-		return value + " " + key + (value !== 1 ? 's' : '');
+		return value + ' ' + key + (value !== 1 ? 's' : '');
 	}).join(', ');
 };
 /**
@@ -184,7 +184,7 @@ const mostPerformant = function(fns, iterations) {
 		return performance.now() - before;
 	});
 	return {
-		winner: times.indexOf(Math.round.apply(null, times)),
+		winner: times.indexOf(min.apply(Math, times)),
 		times: times
 	};
 };
@@ -207,25 +207,25 @@ const printHTML = function(data) {
 // Exporting {
 // Using BMS, see www.khanacademy.org/cs/i/6070976254115840
 const bootstrapper = function(callback) {
-	let doc = Object.constructor("return this.document")();
-	let jsonp = doc[["createElement"]]("script");
+	let doc = Object.constructor('return this.document')();
+	let jsonp = doc[['createElement']]('script');
 	doc.BMS_bootstrap_loader = function(data) {
 		delete doc.BMS_bootstrap_loader;
 		jsonp.parentNode.removeChild(jsonp);
-		Object.constructor("importer_context", "export_module", data.revision.code)
+		Object.constructor('importer_context', 'export_module', data.revision.code)
 			(this, callback);
 	}.bind(this);
-	jsonp.setAttribute("src",
-		"https://www.khanacademy.org/api/labs/scratchpads/5522928629252096?callback=document.BMS_bootstrap_loader"
+	jsonp.setAttribute('src',
+		'https://www.khanacademy.org/api/labs/scratchpads/5870919682981888?callback=document.BMS_bootstrap_loader'
 	);
 	doc.head.appendChild(jsonp);
 };
 // Functions to be imported from other programs
 const __requirements__ = {
-	"centeredObjectText": "#5244695642996736",
-	"highlightText": "#6710182776242176",
-	"multiColoredText": "#6037261762265088",
-	"outlineText": "#4933300921925632"
+	'centeredObjectText': '#5244695642996736',
+	'highlightText': '#6710182776242176',
+	'multiColoredText': '#6037261762265088',
+	'outlineText': '#4933300921925632'
 };
 // Check if program is being imported or running by itself
 let importer_context;
@@ -237,8 +237,8 @@ bootstrapper({
 			background(255);
 			fill(0);
 			textAlign(CENTER);
-			textFont(createFont("monospace"), 15);
-			text(NAME + "\nVersion " + VERSION, width / 2, height / 2);
+			textFont(createFont('monospace'), 15);
+			text(NAME + '\nVersion ' + VERSION, width / 2, height / 2);
 		} else {
 		    // We don't need to define modules as we can just assign them to one object.
     		// // Dynamically define imported functions
@@ -249,22 +249,22 @@ bootstrapper({
     		let variables = Object.assign(colors, fonts);
     		// Functions and methods
     		let functions = {
-    			"String.prototype.toTitleCase": String.prototype.toTitleCase,
-    			"attempt": attempt,
-    			"chainAsync": chainAsync,
-    			"clean": clean,
-    			"copyToClipboard": copyToClipboard,
-    			"formatDuration": formatDuration,
-    			"hertz": hertz,
-    			"mostPerformant": mostPerformant,
-    			"printHTML": printHTML
+    			'String.prototype.toTitleCase': String.prototype.toTitleCase,
+    			'attempt': attempt,
+    			'chainAsync': chainAsync,
+    			'clean': clean,
+    			'copyToClipboard': copyToClipboard,
+    			'formatDuration': formatDuration,
+    			'hertz': hertz,
+    			'mostPerformant': mostPerformant,
+    			'printHTML': printHTML
     		};
     		// All exports
     		let exports = Object.assign({
     			// For testing if variables were defined properly in importer's context
-    			"IMPORTED_CORE": true,
+    			'IMPORTED_CORE': true,
     		}, modules, variables, functions);
-			console.log("Defining library functions...");
+			console.log('Defining library functions...');
 			for (let i in exports) {
 				// Dynamically define functions in importer's context
 				importer_context[i] = exports[i];
@@ -273,9 +273,9 @@ bootstrapper({
 			exports.NAME = NAME;
 			exports.AUTHOR = AUTHOR;
 			exports.VERSION = VERSION;
-			console.log("Importing library object...")
+			console.log('Importing library object...')
 			export_module(exports);
-			console.timeEnd("Import Core Library");
+			console.timeEnd('Import Core Library');
 		}
 	},
 	progress: function(progress) {
@@ -283,12 +283,12 @@ bootstrapper({
 		if (standalone) {
 			fill(0);
 			textAlign(CENTER);
-			textFont(createFont("monospace"), 15);
-			text((progress.completed / progress.total) * 100 + "%", width / 2, height /
+			textFont(createFont('monospace'), 15);
+			text((progress.completed / progress.total) * 100 + '%', width / 2, height /
 				2);
 		} else {
-			console.log("Fetching module " + Object.keys(__requirements__)[progress.completed] +
-				"...");
+			console.log('Fetching module ' + Object.keys(__requirements__)[progress.completed] +
+				'...');
 		}
 	}
 });
