@@ -2,7 +2,7 @@
 
 // For enabling the 'Restart' button
 random();
-/* The current environnment the program is in. To be utilized by modules and core to determine wether verbose debugging and experimental features should be enabled. 
+/* The current environnment the program is in. To be utilized by modules and Essentials to determine wether verbose debugging and experimental features should be enabled. 
 
 Environment should be set to 'production', 'development' or 'canary' */
 const ENV = 'canary';
@@ -10,17 +10,17 @@ const ENV = 'canary';
 console.clear();
 
 // Tests {
-var run = function(core) {
+var run = function(Essentials) {
     try {
         textFont(createFont('monospace'));
         // Demonstrating `chainAsync` by executing tests asynchronously
         chainAsync([function(next) {
             fill(0);
             // Demonstrating `toTitleCase` method
-            text('core library tests'.toTitleCase(), 25, 50);
+            text('Essentials library tests'.toTitleCase(), 25, 50);
             fill(255);
             // Demonstrating `outlineText` function
-            outlineText('v' + core.VERSION, 35 + textWidth('Core Library Tests'), 50);
+            outlineText('v' + Essentials.VERSION, 35 + textWidth('Essentials Library Tests'), 50);
             next(); 
         }, function(next) {
             fill(0);
@@ -60,8 +60,8 @@ var run = function(core) {
             // Demonstrating `printHTML` by printing link to my KA profile
             attempt(printHTML, '<a target="_blank" href="ttps://www.khanacademy.org/profile/AIiquis/">My Profile</a> [Ctrl + Click]');
         }]);
-        mouseReleased = function() {
-            // Demonstrating `copyToClipboard` by copying my KA profile link on mouse release
+        keyReleased = function() {
+            // Demonstrating `copyToClipboard` by copying my KA profile link on key release
             copyToClipboard('https://www.khanacademy.org/profile/AIiquis/');
             println('Copied to clipboard');
         };
@@ -83,7 +83,7 @@ const bootstrapper = function(callback) {
 };
 
 const __requirements__ = {
-    'core': 'library'
+    'Essentials': 'library'
 }
 
 // Import library
@@ -93,7 +93,7 @@ bootstrapper({
         textAlign(LEFT, TOP);
         textSize(12);
         scale(1.25);
-        run(modules.core);
+        run(modules.Essentials);
     },
     progress: function() {
         fill(0);
