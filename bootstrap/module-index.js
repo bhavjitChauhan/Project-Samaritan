@@ -15,6 +15,7 @@ if (export_module) {
         'bootstrap': '5870919682981888',
         'module-index': '5111168422477824',
         'library': '5219990839590912',
+        'elements': '4892508239003648',
         'applications': '6275061522989056',
         'images': '5748624898490368',
     });
