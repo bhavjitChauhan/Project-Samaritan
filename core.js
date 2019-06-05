@@ -1,7 +1,7 @@
 // jshint ignore: start
 const NAME = 'Project Samaritan Core',
-	VERSION = '0.0.3',
-	AUTHOR = 'Aliquis';
+    VERSION = '0.0.3',
+    AUTHOR = 'Aliquis';
 
 // Global Variables {
 /* The current environnment the program is in. To be utilized by modules and core to determine wether verbose debugging and experimental features should be enabled. 
@@ -16,132 +16,130 @@ var clearMemory = clearMemory || false;
 // Imports {
 // Using BMS, see www.khanacademy.org/cs/i/6070976254115840
 const bootstrapper = function(callback) {
-	let doc = Object.constructor('return this.document')();
-	let jsonp = doc[['createElement']]('script');
-	doc.BMS_bootstrap_loader = function(data) {
-		delete doc.BMS_bootstrap_loader;
-		jsonp.parentNode.removeChild(jsonp);
-		Object.constructor('importer_context', 'export_module', data.revision.code)
-			(this, callback);
-	}.bind(this);
-	jsonp.setAttribute('src',
-		'https://www.khanacademy.org/api/labs/scratchpads/5870919682981888?callback=document.BMS_bootstrap_loader'
-	);
-	doc.head.appendChild(jsonp);
+    let doc = Object.constructor('return this.document')();
+    let jsonp = doc[['createElement']]('script');
+    doc.BMS_bootstrap_loader = function(data) {
+        delete doc.BMS_bootstrap_loader;
+        jsonp.parentNode.removeChild(jsonp);
+        Object.constructor('importer_context', 'export_module', data.revision.code)
+            (this, callback);
+    }.bind(this);
+    jsonp.setAttribute('src',
+        'https://www.khanacademy.org/api/labs/scratchpads/5870919682981888?callback=document.BMS_bootstrap_loader'
+    );
+    doc.head.appendChild(jsonp);
 };
 const __requirements__ = {
-	'core': 'library',
-	'images': 'images',
-	'applications': 'applications'
+    'Essentials': 'library',
+    'images': 'images',
+    'applications': 'applications'
 };
 // }
 // System Object {
 const System = function() {
-	// For startup operations
-	this.startup = {
-		// Line number to write to
-		line: 0,
-		// Add line to canvas
-		addLine: function(string) {
-			fill(0);
-			// Pre-increment `this.line` so the `y` value is never 0
-			text(string, 0, ++this.line * textAscent() * 1.5);
-		}
-	};
-	this.createdAt = new Date();
+    // For startup operations
+    this.startup = {
+        // Line number to write to
+        line: 0,
+        // Add line to canvas
+        addLine: function(string) {
+            fill(0);
+            // Pre-increment `this.line` so the `y` value is never 0
+            text(string, 0, ++this.line * textAscent() * 1.5);
+        }
+    };
+    this.createdAt = new Date();
 };
 System.prototype = {
-	// Using the `once` method of underscore.js to prevent system being initialized more than once
-	init: _.once(function() {
-		// Set font for logging to canvas
-		textFont(createFont('monospace'));
-		// Log initialization to canvas
-		this.startup.addLine('Initializing system...');
-		// Clear any console logs created by Khan Academy or extensions
-		console.clear();
-		// Begin timer for initialization
-		console.time('System Initialize');
-		console.log('Initializing system...');
-		// Log system information to console in group
-		console.group('');
-		console.info('%c%s v%s', 'font-weight:bold;', NAME, VERSION);
-		console.info('(c) %d %s. Most rights reserved, I think...', year(), AUTHOR);
-		// Blank line for symmetry in console
-		console.info('');
-		console.groupEnd();
-		this.initialized = true;
-		// End and log system initialization time
-		console.timeEnd('System Initialize');
-	}),
-	// Using the `once` method of underscore.js to prevent system being booted more than once
-	boot: _.once(function() {
-		if (!this.initialized) {
-			console.warn('Attempted system boot before initialization.');
-			this.init();
-		}
-		// Begin timer for system boot
-		console.time('System Boot');
-		console.log('Booting system...');
-		// Background is not set so previous logs to canvas are visible
-		// Set font for logging to verbose screen again, just in case
-		textFont(createFont('monospace'));
-		// Log boot to canvas
-		this.startup.addLine('Booting system...');
-		// Import core library, images and applications
-		bootstrapper({
-			done: function(BMS, modules) {
-				// Check if imported variables were defined globally
-				try {
-					IMPORTED_CORE;
-				} catch (error) {
-					console.error(
-						'Core library variables not defined, restarting program...');
-					Program.restart();
-				}
-				// Run functions asynchronously
-				chainAsync([
-					function(done) {
-						// Load images
-						system.startup.addLine('Loading images');
-						let images = system.images = modules.images;
-						for (let i in images) {
-							console.log('Loading image \'' + images[i].name + '\'...');
-							try {
-								images[i].load();
-							} catch (error) {
-								console.error('Error loading image \'' + images[i].name +
-								    '\'\n' + error);
-							}
-						}
-						console.log('Loaded all ' + images.length + ' images.');
-						done();
-					},
-					function(done) {
-						// Load applications
-						let applications = system.applications = modules.applications;
-						for (let i in applications) {
-							console.log('Loading application \'' + applications[i].name +
-								'\'...');
-							try {
-								applications[i].init();
-							} catch (error) {
-								console.error('Error loading application \'' + applications[i].name +
-									'\'\n' + error);
-							}
-						}
-						console.log('Loaded all ' + applications.length +
-							' applications.');
-						done();
-					},
-					function() {
-						system.booted = true;
-						// End and log system boot time
-						console.timeEnd('System Boot');
-					}
-				]);
-			}
-		});
-	})
+    // Using the `once` method of underscore.js to prevent system being initialized more than once
+    init: _.once(function() {
+        // Set font for logging to canvas
+        textFont(createFont('monospace'));
+        // Log initialization to canvas
+        this.startup.addLine('Initializing system...');
+        // Clear any console logs created by Khan Academy or extensions
+        console.clear();
+        // Begin timer for initialization
+        console.time('System Initialize');
+        console.log('Initializing system...');
+        // Log system information to console in group
+        console.group('');
+        console.info('%c%s v%s', 'font-weight:bold;', NAME, VERSION);
+        console.info('(c) %d %s. Most rights reserved, I think...', year(), AUTHOR);
+        // Blank line for symmetry in console
+        console.info('');
+        console.groupEnd();
+        this.initialized = true;
+        // End and log system initialization time
+        console.timeEnd('System Initialize');
+    }),
+    // Using the `once` method of underscore.js to prevent system being booted more than once
+    boot: _.once(function() {
+        if (!this.initialized) {
+            console.warn('Attempted system boot before initialization.');
+            this.init();
+        }
+        // Begin timer for system boot
+        console.time('System Boot');
+        console.log('Booting system...');
+        // Background is not set so previous logs to canvas are visible
+        // Set font for logging to verbose screen again, just in case
+        textFont(createFont('monospace'));
+        // Log boot to canvas
+        this.startup.addLine('Booting system...');
+        // Import Essentials library, images and applications
+        bootstrapper({
+            done: function(BMS, modules) {
+                // Check if imported variables from Essentials library were defined globally
+                if (typeof IMPORTED_ESSENTIALS == 'undefined') {
+                    console.error(
+                        'Essentials library variables not defined, restarting program...');
+                    Program.restart();
+                }
+                // Run functions asynchronously
+                chainAsync([
+                    function(done) {
+                        // Load images
+                        system.startup.addLine('Loading images');
+                        let images = system.images = modules.images;
+                        for (let i in images) {
+                            console.log('Loading image \'' + images[i].name + '\'...');
+                            try {
+                                images[i].load();
+                            } catch (error) {
+                                console.error('Error loading image \'' + images[i].name +
+                                    '\'\n' + error);
+                            }
+                        }
+                        console.log('Loaded all ' + images.length + ' images.');
+                        done();
+                    },
+                    function(done) {
+                        // Load applications
+                        let applications = system.applications = modules.applications;
+                        for (let i in applications) {
+                            console.log('Loading application \'' + applications[i].name +
+                                '\'...');
+                            try {
+                                applications[i].init();
+                            } catch (error) {
+                                console.error('Error loading application \'' + applications[i].name +
+                                    '\'\n' + error);
+                            }
+                        }
+                        console.log('Loaded all ' + applications.length +
+                            ' applications.');
+                        done();
+                    },
+                    function() {
+                        system.booted = true;
+                        // End and log system boot time
+                        console.timeEnd('System Boot');
+                    }
+                ]);
+            }
+        });
+    })
 };
 // }
 // Drawing {
@@ -165,7 +163,7 @@ try {
 }
 draw = function() {
     // Draw test applications if system is booted
-	system.booted && system.applications[0].draw();
+    system.booted && system.applications[0].draw();
 }
 // }
 
