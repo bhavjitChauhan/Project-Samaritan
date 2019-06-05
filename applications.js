@@ -1,41 +1,41 @@
 // jshint ignore: start
 const NAME = 'Project Samaritan Applications Library',
-	VERSION = '0.0.2',
-	AUTHOR = 'Aliquis';
+    VERSION = '0.0.2',
+    AUTHOR = 'Aliquis';
 
 console.time('Import Applications');
 // Application Object {
 const Application = function(name, init, code) {
-	this.name = name || 'Unknown';
-	if (typeof init !== 'function') {
-		console.error('Application \'' + this.name +
-			'\' has invalid initialization code.');
-		return;
-	}
-	if (typeof code !== 'function') {
-		console.error('Application \'' + this.name + '\' has invalid draw code.');
-		return;
-	}
-	this.init = function() {
-		pushMatrix();
-		pushStyle();
-		init();
-		popStyle();
-		popMatrix();
-		this.initialized = true;
-	};
-	this.draw = function() {
-		if (!this.initialized) {
-			console.warn('Attempted to draw Application \'' + this.name +
-				'\' before initialization.');
-			this.init();
-		}
-		pushMatrix();
-		pushStyle();
-		code();
-		popStyle();
-		popMatrix();
-	};
+    this.name = name || 'Unknown';
+    if (typeof init !== 'function') {
+        console.error('Application \'' + this.name +
+            '\' has invalid initialization code.');
+        return;
+    }
+    if (typeof code !== 'function') {
+        console.error('Application \'' + this.name + '\' has invalid draw code.');
+        return;
+    }
+    this.init = function() {
+        pushMatrix();
+        pushStyle();
+        init();
+        popStyle();
+        popMatrix();
+        this.initialized = true;
+    };
+    this.draw = function() {
+        if (!this.initialized) {
+            console.warn('Attempted to draw Application \'' + this.name +
+                '\' before initialization.');
+            this.init();
+        }
+        pushMatrix();
+        pushStyle();
+        code();
+        popStyle();
+        popMatrix();
+    };
 };
 // }
 // Applications {
@@ -55,9 +55,9 @@ var applications = [testApplication];
 // Exporting {
 let export_module;
 if (export_module) {
-	console.log('Importing applications object...')
-	export_module(applications);
-	console.timeEnd('Import Applications');
+    console.log('Importing applications object...')
+    export_module(applications);
+    console.timeEnd('Import Applications');
 } else {
     background(255);
     fill(0);
